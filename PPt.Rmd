@@ -1,0 +1,513 @@
+---
+title: "&#x1F389; 试用期工作总结"
+subtitle: "⚔️ 江苏今点 - 研发部 - 研发二部"
+author: 
+  -  "陆佳欢"
+institute: "上海今点软件有限公司"
+date: "`r Sys.Date()`"
+format: revealjs
+
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      ratio: 16:9
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  hiline = TRUE
+)
+```
+
+```{r xaringan-themer, warning=FALSE, include=FALSE}
+library(xaringanthemer)
+style_mono_light(base_color = "#23395b")
+```
+
+#流程三部分
+
+##  [**<span style="color:#A52A2A">一、项目与产出</span>**](#3)
+##  二、在研与反馈
+##  三、总结与致谢
+
+---
+class: inverse, center, middle
+
+#  一、项目与产出
+
+---
+## 📱 新北区市政人员上班玩手机检测
+
+<!-- 标题栏 -->
+<div style="display: flex; justify-content: center; gap: 120px; margin-top: 1em; font-weight: bold;">
+  <div style="color: #e74c3c; font-size: 1.1em;">📌 业务需求点</div>
+  <div style="color: #2ecc71; font-size: 1.1em;">🔧 解决方式</div>
+</div>
+
+<!-- 对应内容卡片组 -->
+<div style="display: flex; flex-direction: column; gap: 25px; align-items: center; margin-top: 10px;">
+
+  <div style="display: flex; align-items: center; border-radius: 12px; padding: 15px 25px; background: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.05); width: 80%;">
+    <div style="flex: 1; text-align: right; color: #2c3e50;">🧩 明确任务类型</div>
+    <div style="flex: 0; padding: 0 20px; font-size: 1.6em; color: #3498db;">➡️</div>
+    <div style="flex: 1; text-align: left; color: #34495e;">📦 判断为目标检测任务</div>
+  </div>
+
+  <div style="display: flex; align-items: center; border-radius: 12px; padding: 15px 25px; background: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.05); width: 80%;">
+    <div style="flex: 1; text-align: right; color: #2c3e50;">⚙️ 通用服务器设备部署</div>
+    <div style="flex: 0; padding: 0 20px; font-size: 1.6em; color: #3498db;">➡️</div>
+    <div style="flex: 1; text-align: left; color: #34495e;">💡 使用 YOLOv5 / YOLOv8 + ONNX 推理部署</div>
+  </div>
+
+  <div style="display: flex; align-items: center; border-radius: 12px; padding: 15px 25px; background: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.05); width: 80%;">
+    <div style="flex: 1; text-align: right; color: #2c3e50;">🔥 泛化能力不足</div>
+    <div style="flex: 0; padding: 0 20px; font-size: 1.6em; color: #3498db;">➡️</div>
+    <div style="flex: 1; text-align: left; color: #34495e;">🧠 结合开源数据预训练 + 业务数据标注增强泛化</div>
+  </div>
+
+</div>
+
+???
+### 🧠 视觉任务类型汇总 + 导出部署格式一览 
+<!-- 图像展示 -->
+<div style="width:70%; margin: 0 auto 20px auto; text-align:center;">
+  <p style="font-weight: bold; font-size: 1.1em;">📌 视觉任务类型分类参考图</p>
+  <img src="https://s3.bmp.ovh/imgs/2025/04/22/8e1c3df5bce9bde1.png" style="width:100%; border-radius: 8px;">
+</div>
+
+<!-- 导出格式表格说明 -->
+<p style="font-weight: bold; font-size: 1.1em; text-align:center; margin-bottom: 0.5em;">📦 YOLO 不同任务导出与平台部署格式总结 </p>
+
+<table style="width:85%; margin: 0 auto; font-size: 0.95em; border-collapse: collapse;">
+  <thead style="background:#f1f1f1;">
+    <tr>
+      <th style="padding: 10px; border: 1px solid #ccc;"> 平台类型 </th>
+      <th style="padding: 10px; border: 1px solid #ccc;"> 导出格式 </th>
+      <th style="padding: 10px; border: 1px solid #ccc;"> 部署框架 </th>
+      <th style="padding: 10px; border: 1px solid #ccc;"> 备注 </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding: 10px; border: 1px solid #ccc;">📱 安卓手机 </td>
+      <td style="padding: 10px; border: 1px solid #ccc;">ncnn / torchmobile</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">PNNX / TNN / MNN</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">轻量级部署，适配 ARM</td>
+    </tr>
+    <tr>
+      <td style="padding: 10px; border: 1px solid #ccc;">🖥️ 通用 CPU</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">ONNX / OpenVINO</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">onnxruntime / openvino</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">跨平台，性能平衡</td>
+    </tr>
+    <tr>
+      <td style="padding: 10px; border: 1px solid #ccc;">🎮 GPU 加速部署</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">ONNX / .engine</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">TensorRT</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">RTX 部署首选，推理更快显存更省</td>
+    </tr>
+    <tr>
+      <td style="padding: 10px; border: 1px solid #ccc;">🧪 Python 调试 </td>
+      <td style="padding: 10px; border: 1px solid #ccc;">.pt / .pth</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">PyTorch</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">训练 / 推理阶段常用</td>
+    </tr>
+    <tr>
+      <td style="padding: 10px; border: 1px solid #ccc;">☕ Java 调用 </td>
+      <td style="padding: 10px; border: 1px solid #ccc;">ONNX / JAR</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">JavaCV / JNI</td>
+      <td style="padding: 10px; border: 1px solid #ccc;">适合政务系统调用</td>
+    </tr>
+  </tbody>
+</table>
+               |
+
+---
+
+### 📊 <strong>场景实测结果展示</strong>  
+
+<div style="width:60%; margin: 0 auto; text-align:center;">
+  <img src="https://s3.bmp.ovh/imgs/2025/04/22/2cdc28971fea7a65.jpg" style="width:100%; border-radius: 12px;">
+</div>
+
+<div style="width:60%; margin: 30px auto 0 auto; text-align:center;">
+  <img src="https://s3.bmp.ovh/imgs/2025/04/22/2cdc28971fea7a65.jpg" style="width:100%; border-radius: 12px;">
+
+</div>
+
+???
+### 🧠 行为检测算法流程
+
+1. **区域裁剪**  
+   根据摄像头安装位置，对输入画面进行预处理，  
+   仅截取包含驾驶员行为的关键区域，剔除无关背景。
+
+2. **目标检测**  
+   使用 YOLO 系列模型（YOLOv5 / YOLOv8）对裁剪图像进行物体检测，  
+   识别如 “玩手机” 目标。
+
+3. **手部跟踪**  
+   在原图基础上，结合 Mediapipe 框架实现对人手位置的实时追踪，  
+   获取关键点信息。
+
+4. **行为判定**  
+   将手部位置与目标检测结果（如 “玩手机”物体框）进行空间交集判断，  
+   若重叠显著，则判定为 “正在玩手机” 行为。
+
+5. **结果推流**  
+   最终检测结果以标注视频形式通过 RTSP 协议实时推送至服务器，  
+   供平台端可视化展示与业务接入。
+---
+
+## 🧾 OCR识别身份证地址模型开发 
+
+<!-- 标题栏 -->
+<div style="display: flex; justify-content: center; gap: 120px; margin-top: 1em; font-weight: bold;">
+  <div style="color: #e74c3c; font-size: 1.1em;">📌 业务需求点</div>
+  <div style="color: #2ecc71; font-size: 1.1em;">🔧 解决方式</div>
+</div>
+
+<!-- 卡片结构 -->
+<div style="display: flex; flex-direction: column; gap: 25px; align-items: center; margin-top: 10px;">
+
+  <div style="display: flex; align-items: center; border-radius: 12px; padding: 15px 25px; background: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.05); width: 80%;">
+    <div style="flex: 1; text-align: right; color: #2c3e50;">🧾 抽取身份证地址信息</div>
+    <div style="flex: 0; padding: 0 20px; font-size: 1.6em; color: #3498db;">➡️</div>
+    <div style="flex: 1; text-align: left; color: #34495e;">🔍构建OCR识别模型</div>
+  </div>
+
+  <div style="display: flex; align-items: center; border-radius: 12px; padding: 15px 25px; background: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.05); width: 80%;">
+    <div style="flex: 1; text-align: right; color: #2c3e50;">🖥️  身份证各种场景诸如盖章灰度等</div>
+    <div style="flex: 0; padding: 0 20px; font-size: 1.6em; color: #3498db;">➡️</div>
+    <div style="flex: 1; text-align: left; color: #34495e;">⚙️ 开源高精度模型 PaddleOCR/CNOCR</div>
+  </div>
+
+  <div style="display: flex; align-items: center; border-radius: 12px; padding: 15px 25px; background: #ffffff; box-shadow: 0 4px 8px rgba(0,0,0,0.05); width: 80%;">
+    <div style="flex: 1; text-align: right; color: #2c3e50;">📦 要求可打包部署、体积小</div>
+    <div style="flex: 0; padding: 0 20px; font-size: 1.6em; color: #3498db;">➡️</div>
+    <div style="flex: 1; text-align: left; color: #34495e;">📁 采用 PyInstaller 打包为单可执行文件（≤ 200MB）</div>
+  </div>
+
+</div>
+???
+### 📊 主流 OCR 引擎对比分析
+
+| 引擎名称         | 识别效果（中文） | 是否离线可用 | 模型体积 | 优势特点                           | 适用场景         |
+|------------------|------------------|----------------|----------|------------------------------------|------------------|
+| **Google OCR (Tesseract)** | ⭐⭐☆差    | ✅ 支持         | 中等     | 多语种支持，部署简单，社区活跃     | 通用低精度场景   |
+| **PaddleOCR**     | ⭐⭐⭐⭐（准确率高） | ✅ 支持         |  中等   | 支持检测+识别，模块化强，训练方便 | 实际部署 + 定制场景 |
+| **CnOCR**         | ⭐⭐⭐（准确率最高）   | ✅ 支持         |  大      | 轻量快速，中文识别优化             |  服务端 |
+| **chinese_lite_OCR** | ⭐⭐☆（轻量）       | ✅ 支持         | 极小     | 无需训练直接用，完全中文优化       | 嵌入式、移动端  |
+
+---
+<div style="font-size: 85%; line-height: 1.5;">
+
+<h3 style="margin-top: 0;">🧠 丰浩人脸验证模型开发</h3>
+
+📌 <strong>项目背景</strong>  
+丰浩数字人平台需集成人脸身份核验模块，要求基于 CPU 推理运行，并具备高精度比对能力，尤其需适配亚洲面部特征，确保核验结果稳定、可靠。
+<br><br>
+🧪 <strong>原始方案：DeepFace</strong>  
+最初采用 <strong>DeepFace</strong> 框架（默认使用 vgg-face 模型），具备集成度高、开箱即用等优点，支持多模型对比。  
+但在实际测试中存在以下问题：
+
+<ul style="margin: 4px 0 12px 20px;">
+  <li>❌ 对亚洲面部识别精度较低，误识率偏高</li>
+  <li>❌ 对侧脸、光照变化适应性不足</li>
+  <li>❌ CPU 推理速度慢，单张对比约需 5–10 秒</li>
+</ul>
+<br>
+🎯 <strong>方案改进：InsightFace</strong>  
+我们改用 <strong>InsightFace</strong> 框架，选用 <strong>ArcFace 架构 + Glint360K 预训练模型</strong>，并配合人脸对齐与标准化处理，测试表现如下：
+
+<ul style="margin: 4px 0 12px 20px;">
+  <li>✅ 精度明显提升，误识率大幅下降</li>
+  <li>✅ 对多角度、不同光照条件具备良好鲁棒性</li>
+  <li>✅ 支持 CPU + ONNX 部署，推理速度提升至 0.5–1 秒/张</li>
+</ul>
+<br>
+✅ <strong>最终结论</strong>  
+最终选用 <strong>InsightFace（ArcFace）</strong> 作为核心识别方案，<strong>在精度、速度和稳定性方面全面优于原方案 DeepFace</strong>，特别适用于亚洲人脸场景下的身份证核验任务。
+
+</div>
+
+
+---
+📊 人脸识别后端准确率对比分析
+
+<div style="text-align: center;">
+  <img src="https://s3.bmp.ovh/imgs/2025/04/23/ec48cb246ad571f9.png" style="width:70%; border-radius: 12px;">
+</div>
+
+
+---
+### 📌 数字人多模态交互：从“按键交互”到“视觉感知”
+
+#### 🧱 传统交互方式的痛点
+
+- 🎙️ 唤醒依赖语音或按键，交互流程割裂（如“你好小X”之后再点击）
+- 📉 嘈杂环境中语音识别失败率高，体验不一致
+- 🔄 缺少状态感知，无法判断用户是否真正发声/准备交互
+
+
+#### 🚀 我们的视觉增强方案
+
+| 模块            | 功能说明               | 技术实现                                | 主要优势                             |
+|-----------------|------------------------|-----------------------------------------|--------------------------------------|
+| 👄 唇动检测       | 判断用户是否正在说话     | Mediapipe 提取 ROI + CNN / RNN 后端     | 准确区分发声/无声，有效过滤环境干扰       |
+| 🧠 人脸唤醒       | 实时识别用户在镜头前     | Mediapipe + 置信度阈值检测              | 替代传统按键，实现“看即激活”          |
+| 🎯 目标追踪       | 保持追踪当前用户人脸     | 低延迟人脸定位算法，锁定并持续追踪       | 跟踪稳定，不丢目标，防止切换误触        |
+| 📈 时序模型推理   | 分析发声状态的时序稳定性 | 双层 LSTM / GRU 网络结构                 |  解决人工阈值设置带来的摄像头误判问题    |
+
+---
+#### 🌟 亮点总结
+
+- ✅ **通用算力部署**：适配 CPU / ARM 等边缘设备，无需高性能 GPU
+- ✅ **视觉 + 音频 多模态融合**：提升识别准确性， 剔除非主说话人干扰
+- ✅ **真实场景适配**：可实现“边聊边办”，无需多次唤醒/操作
+- ✅ **用户体验增强**：替代按钮触发
+
+
+#### 📌 应用示例场景 
+
+- 🖥️ 自助机：摄像头检测到人脸自动唤醒，用户只需张口说话即可办理业务  
+- 🧑‍💼 新北区数字人：部署在大厅前台，支持自然交互，辅助智能推荐与指引  
+- 🏦 重庆农行数字人：配合语音合成系统，用于智能客服与网点业务办理提升
+
+
+---
+class: inverse center middle
+
+# 🤖 当前在做的项目
+
+--
+---
+### 🚗 驾驶员行为识别演示 
+
+<video width="75%" controls autoplay muted loop>
+  <source src="https://files.catbox.moe/ywbfn5.mkv" type="video/webm">
+</video>
+
+**说明**：基于方向盘手部、物体目标检测与人脸状态，检测疲劳驾驶/操作干扰行为。
+
+---
+### 🏛️ 天宁区大厅监控识别
+
+ <h3 style="text-align:center; margin-bottom: 1em;"> 智能行为检测功能进展一览</h3>
+
+<table style="width:100%; border-collapse: collapse; font-size: 90%;">
+  <thead>
+    <tr style="background-color: #f1f5f9; text-align: left;">
+      <th style="padding: 8px;">功能模块</th>
+      <th style="padding: 8px;">当前状态</th>
+      <th style="padding: 8px;">技术实现</th>
+      <th style="padding: 8px;">简要说明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding: 6px;">🎯 行为检测（MOT）</td>
+      <td style="padding: 6px;">✅ 已完成</td>
+      <td style="padding: 6px;">PP-Human (PaddleDetection)</td>
+      <td style="padding: 6px;">实现多目标检测与跟踪，支撑后续行为判断</td>
+    </tr>
+    <tr>
+      <td style="padding: 6px;">🧍‍♂️ 人流量估计</td>
+      <td style="padding: 6px;">🚧 进行中</td>
+      <td style="padding: 6px;">头部检测 + 区域热图分析</td>
+      <td style="padding: 6px;">估算区域人数，支持排队/拥堵分析</td>
+    </tr>
+    <tr>
+      <td style="padding: 6px;">🚬 吸烟检测</td>
+      <td style="padding: 6px;">✅ 已完成</td>
+      <td style="padding: 6px;">PP-Human + 属性分类</td>
+      <td style="padding: 6px;">支持静止/动态吸烟场景检测与报警</td>
+    </tr>
+    <tr>
+      <td style="padding: 6px;">🤕 跌倒检测</td>
+      <td style="padding: 6px;">🚧 进行中</td>
+      <td style="padding: 6px;">姿态识别 + 动作时序规则</td>
+      <td style="padding: 6px;">检测摔倒、失衡等异常行为</td>
+    </tr>
+    <tr>
+      <td style="padding: 6px;">📱 玩手机检测</td>
+      <td style="padding: 6px;">✅ 已完成</td>
+      <td style="padding: 6px;">PP-Human 手部+头部融合</td>
+      <td style="padding: 6px;">判别是否处于非办事注意状态</td>
+    </tr>
+    <tr>
+      <td style="padding: 6px;">🚪 离岗检测</td>
+      <td style="padding: 6px;">🔬 研究中</td>
+      <td style="padding: 6px;">MOT 轨迹缺失 + 区域离开判别</td>
+      <td style="padding: 6px;">识别工作人员/办事人临时离开岗位</td>
+    </tr>
+  </tbody>
+</table>
+
+
+---
+#流程三部分
+
+##  一、项目与产出
+##   [**<span style="color:#A52A2A">二、在研与反馈</span>**](#17)
+##  三、总结与致谢
+---
+class: inverse, center, middle
+
+#  二、在研与反馈 
+
+---
+
+## 🧠 手工知识图谱系统构建流程 
+
+🔧 **流程模块概览**
+
+- 🧱 **1. 办事结构抽取**  
+  输入事项指南，提取实体（事项、材料、流程等），生成初步图谱并入库 Neo4j。
+
+- 🤖 **2. 用户意图识别**  
+  使用大模型分类用户意图，如「查询事务办理材料」、「查询部门」等。
+
+- 🧠 **3. 关键实体识别**  
+  结合 RoBERTa、TF-IDF 与正则提取关键信息（如事项="低保"，行为="申请"）。
+
+- 🔍 **4. 子图查询生成**  
+  根据意图和实体生成 Cypher 查询，抓取路径/属性/跳跃节点结果。
+
+- 🔗 **5. 答复工作流对接**  
+  将查询结果结构化处理（JSON），接入 Dify 或 Flow 平台，实现对话式输出。
+
+---
+<h3 style="text-align:center;">📊 基于大模型的 RAG 框架能力对比分析</h3>
+
+<table style="width:100%; border-collapse: collapse; font-size: 90%;">
+  <thead style="background:#f3f4f6;">
+    <tr>
+      <th style="padding: 8px;">框架名称</th>
+      <th style="padding: 8px;">优点</th>
+      <th style="padding: 8px;">局限性</th>
+      <th style="padding: 8px;">部署复杂度</th>
+      <th style="padding: 8px;">推理响应速度</th>
+      <th style="padding: 8px;">建图 Token 成本</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>GraphRAG</strong></td>
+      <td>支持多跳推理，结构化图谱增强可解释性</td>
+      <td>建图和查询成本高，响应缓慢</td>
+      <td>中，可通过本地部署实现</td>
+      <td>慢（约 10–20 秒/问）</td>
+      <td>高，支持增量构建</td>
+    </tr>
+    <tr>
+      <td><strong>Fast GraphRAG</strong></td>
+      <td>成本降低 6 倍，支持异步增量更新</td>
+      <td>生态早期，文档较少</td>
+      <td>中</td>
+      <td>快</td>
+      <td>中</td>
+    </tr>
+    <tr>
+      <td><strong>LightRAG</strong></td>
+      <td>极低 Token 消耗，适用于复杂问答领域</td>
+      <td>对图结构依赖强，领域适用性有限</td>
+      <td>低，支持 Docker 部署</td>
+      <td>快（约 3–10 秒）</td>
+      <td>低，可准确切出办事指南类实体</td>
+    </tr>
+    <tr>
+      <td><strong>KAG</strong></td>
+      <td>融合深度知识，无需显式检索</td>
+      <td>建图复杂，响应慢，不适合动态更新</td>
+      <td>高</td>
+      <td>慢（约 30 秒/问）</td>
+      <td>高</td>
+    </tr>
+    <tr>
+      <td><strong>LangChain</strong></td>
+      <td>模块化丰富，生态活跃，易于组合多种工具</td>
+      <td>抽象层复杂，调试困难，性能不稳定</td>
+      <td>中</td>
+      <td>中（响应尚可）</td>
+      <td>中</td>
+    </tr>
+    <tr>
+      <td><strong>RAGFlow</strong></td>
+      <td>提供完整工作流管理，支持多模态扩展</td>
+      <td>部署资源要求高，Docker 占用大（~50GB）</td>
+      <td>高</td>
+      <td>中（约 5–10 秒）</td>
+      <td>中</td>
+    </tr>
+    <tr>
+      <td><strong>nano-GraphRAG</strong></td>
+      <td>代码轻量，适合原型开发，支持异步调用</td>
+      <td>功能简化，准确率中等，适合轻量场景</td>
+      <td>低</td>
+      <td>快</td>
+      <td>低</td>
+    </tr>
+  </tbody>
+</table>
+
+ 
+---
+## 🧠 实现业务智能体 
+
+<img src="https://s3.bmp.ovh/imgs/2025/04/23/907087e0d3665b2a.png" style="width: 85%; margin: 1em auto; display: block; border-radius: 8px;" />
+
+<p style="font-size: 85%; text-align: center; margin-top: 0.5em; color: #555;">
+图：Agent 在任务分解、工具调用、记忆状态更新过程中的闭环执行机制
+</p>
+---
+ 
+### ✅ 反馈要点
+
+1. **需要真实的环境测试图谱环境**  
+   在 Dify 平台创建测试环境，结合真实场景模拟测试，闭环验证图谱执行效果。
+
+2. **业务需求建议以文本明确表达**  
+   提供完整的文档化业务需求与典型问题样本，以支撑实体设计与结构建图。
+ 
+
+---
+#流程三部分
+
+##  一、项目与产出
+##  二、在研与反馈 
+##  [**<span style="color:#A52A2A">三、总结与致谢</span>**](#5)
+---
+class: inverse, center, middle
+
+#总结与致谢
+---
+
+## 🎯 总结
+
+在试用期内，我参与并完成了多个真实项目的建模与部署工作，涵盖政务行为识别、身份核验、数字人交互等关键方向。  
+同时也主动探索了图谱问答、Agent 工作流等创新能力，为后续 AI 融合奠定基础。
+
+未来我希望能持续参与公司核心场景智能化落地，推动更多技术在政务服务中的真实应用💼🤖
+
+
+---
+class: center, middle
+
+# Thanks!
+
+
+
+
